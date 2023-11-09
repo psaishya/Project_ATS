@@ -325,6 +325,24 @@ def get_message(request):
     print(message_to_send)
     print(type(message_to_send))
     message_to_send = message_to_send.strip()
+
+    # if(message_to_send=="Attendance not possible now"):
+    #     x="Attendance not possible now"
+    #     return JsonResponse({'data': "Attendance not possible now"})
+    # elif(message_to_send=="No data found for student with ID"):
+    #     x="No data found for student with ID"
+    #     return JsonResponse({'data': "No data found for student with ID "})
+    # elif(message_to_send==""):
+    #     x="no message"
+    #     return JsonResponse({'data': "no message"})
+    # # else:
+    # #     x="Attendance successful"
+    # #     # return JsonResponse({'data':"Attendance successful"})
+    # elif (message_to_send=="Attendance recorded"):
+    #     x="Attendance successfulyuguuuuuuuuuuu"
+    #     return JsonResponse({'data':"Attendance successful"})
+
+    # print(x)
     return JsonResponse({'data': message_to_send})
 
 
@@ -341,22 +359,38 @@ def show_attended_student(request):
         sn=1
         print(ids)
         for id in ids:
-            splited=id.split('_')
-            name=splited[2]
-            batch=splited[1]
-            rollno=splited[3]
-            program=splited[0]
-            dict_of_Attended[sn]=name
-            sn+=1
+            
+                splited=id.split('_')
+                name=splited[2]
+                batch=splited[1]
+                rollno=splited[3]
+                program=splited[0]
+                dict_of_Attended[sn]=name
+                sn+=1
         print(dict_of_Attended)
     return JsonResponse({'data': dict_of_Attended})
 
-
+def showdata(request):
+    return render(request,"showdata.html")
 
 
 def view_attendance(request):
     return render(request,"view_attendance.html")
 
+# def showattendancebydate(request):
+#     print(request)
+#     data = json.loads(request.body)
+#     selected_date = data.get('selected_date')
+#     selected_date=None
+#     check = request.POST.get("selected_date")
+#     print(check)
+#     if request.method == 'POST':
+#         selected_date = request.POST.get("selected_date")
+#         print("yes it is post")
+#         print("Selected Date:", selected_date)
+#         data2 = {'result': selected_date}
+
+#         return JsonResponse(data2)
 
 def showattendancebydate(request):
     if request.method == 'POST':
@@ -375,17 +409,28 @@ def showattendancebydate(request):
                 ids=list(attended.keys())
                 sn=1
                 print(ids)
+                
                 for id in ids:
-                    splited=id.split('_')
-                    name=splited[2]
-                    batch=splited[1]
-                    rollno=splited[3]
-                    program=splited[0]
-                    dict_of_Attended[sn]=name
-                    sn+=1
-                print(dict_of_Attended)
+                    dateref=db.reference(f'Students/{id}')
+                    daterefdata=dateref.get()
+                    if daterefdata is not None:
+                        print(daterefdata)
+                        # last_attendance=time.strptime(daterefdata['last_attendance_time'], '%Y-%m-%d %H:%M:%S')
+                        last_attendance=daterefdata['last_attendance_time']
+                        print(last_attendance)
+                        splited=id.split('_')
+                        name=splited[2]
+                        batch=splited[1]
+                        rollno=splited[3]
+                        program=splited[0]
+                        
+                        dict_of_Attended[sn]={"Name":name,"DateofAttendance":last_attendance}
+
+                        sn+=1
+                    
+                print(dict_of_Attended) 
             # else:
-            #       dict_of_Attended["message":"No data available"]      
+            #       dict_of_Attended["message":"No data available"]       
             return JsonResponse({'data': dict_of_Attended})
 
         except json.JSONDecodeError as e:
@@ -394,4 +439,5 @@ def showattendancebydate(request):
             return JsonResponse({'result': 'error', 'message': 'Invalid JSON data'}, status=400)
 
     return JsonResponse({'result': 'error', 'message': 'Invalid request method'}, status=400)
+
 

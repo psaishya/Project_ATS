@@ -60,6 +60,7 @@
                     console.log(attendedStudentData)
                     console.log(data);
                     showdata(attendedStudentData);
+                    
 
                  })
                 .catch(error => console.error('Error:', error));
@@ -74,47 +75,43 @@
                 var table = document.createElement('table');
                 var thead = document.createElement('thead');
                 var row = thead.insertRow();
-                var keycell = row.insertCell(0);
-                var valuecell = row.insertCell(1);
-                keycell.innerText = "key";
-                valuecell.innerText = "Name";
+                var sncell = row.insertCell(0);
+                var namecell = row.insertCell(1);
+                var datecell = row.insertCell(2);
+
+                sncell.innerText = "SN";
+                namecell.innerText = "Name";
+                datecell.innerText = "Date of attendance";
+
                 var tbody = document.createElement('tbody');
                 
-                for (var key in attendedStudentData) {
+                Object.keys(attendedStudentData).forEach(key => {
+                    console.log(attendedStudentData[key])
+                    eachstudent=attendedStudentData[key]
                     var row = tbody.insertRow();
-                    var keycell = row.insertCell(0);
-                    var valuecell = row.insertCell(1);
-            
-                    keycell.innerText = key;
-                    valuecell.innerText = attendedStudentData[key];
-                }
+                    var sncell = row.insertCell(0);
+                    sncell.innerText = key;
+                    var namecell = row.insertCell(1);
+                    var datecell = row.insertCell(2);
+                    namecell.innerText = eachstudent["Name"];
+                    datecell.innerText = eachstudent["DateofAttendance"]
+                  
+                    
+
+                });
+                
                 table.appendChild(thead);
 
                 table.appendChild(tbody);
                 tableContainer.appendChild(table);
-                {% comment %} document.body.innerHTML = '';
-
-                document.body.appendChild(tableContainer); {% endcomment %}
+             
                 document.getElementById('student_table').innerHTML = '';
-                {% comment %} division.appendChild(table); {% endcomment %}
                 document.getElementById('student_table').appendChild(tableContainer); 
 
             }
             
-            function addRowToTable(key, value) {
-                var tableContainer = document.getElementById('yourTableContainer');
-                tableContainer.innerHTML = '';
-                const tableBody = document.getElementById('attendedContainer');
-                const newRow = document.createElement('tr');
-                const keyCell = document.createElement('td');
-                keyCell.textContent = key;
-                const valueCell = document.createElement('td');
-                valueCell.textContent = value;
-                newRow.appendChild(keyCell);
-                newRow.appendChild(valueCell);
-                tableBody.appendChild(newRow);
-            }
-
+            
+           
 
             function getCookie(name) {
                 var cookieValue = null;
