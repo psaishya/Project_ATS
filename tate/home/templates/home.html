@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+</head>
+<body>
+    <h1>Data Recording Options</h1>
+
+    <button onclick="recordNewData()">Record New Data</button>
+    <button onclick="takeAttendance()">Take Attendance</button>
+    <button onclick="trainModel()">Train Model</button>
+    <button onclick="viewAttendance()">View Attendance</button>
+
+
+
+    <script>
+        function recordNewData() {
+            // Add your logic for recording new data here
+            alert("Recording new data...");
+            window.location.href = "{% url 'facedata_capture' %}";
+
+        }
+
+        function takeAttendance() {
+            // Add your logic for taking attendance here
+            alert("Taking attendance...");
+            window.location.href = "{% url 'take_attendance' %}";
+
+        }
+
+        function trainModel(){
+            alert("Training model...");
+            window.location.href = "{% url 'training_model' %}";
+            {% comment %} window.location.href = "{% url 'train_model' %}"; {% endcomment %}
+
+        }
+        function viewAttendance(){
+            alert("Viewing attendance...");
+            window.location.href = "{% url 'view_attendance' %}";
+
+        }
+    </script>
+</body>
+</html>

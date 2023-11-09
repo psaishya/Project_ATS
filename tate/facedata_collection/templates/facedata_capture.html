@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Data Capture Confirmation</title>
+</head>
+<body>
+    <h1>Face Data Capture Confirmation</h1>
+
+    <form method="post" action="{% url 'facedata_capture' %}">
+        {% csrf_token %}
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br>
+
+        <label for="rollno">Roll Number:</label>
+        <input type="text" id="rollno" name="rollno" required><br>
+
+        <label for="batch">Batch:</label>
+        <input type="text" id="batch" name="batch" required><br>
+
+        <label for="program">Program:</label>
+        <input type="text" id="program" name="program" required><br>
+
+        <button type="submit">Capture Now</button>
+    </form>
+
+    <div id="liveFeed">
+        <img src="{% url 'webcam_stream' %}" alt="Webcam check" width="640" height="480">
+    </div>
+
+    <div id="capturedFace">
+        <!-- The last captured face will be displayed here -->
+    </div>
+    {{message}}
+    <script>
+        // Check if the message is "Successfully recorded"
+        var message = "{{ message }}";
+        if (message === "Successfully recorded") {
+            // Show a tick mark in an alert
+            alert("✔ Successfully recorded");
+
+            window.location.href = "{% url 'home' %}";
+
+        }
+    </script>
+   
+
+    <!-- You can add more content or redirect to other pages as needed -->
+</body>
+</html>

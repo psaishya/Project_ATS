@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+    
+            th, td {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+    
+            th {
+                background-color: #f2f2f2;
+            }
+        </style>
+    </head>
+    <body>
+        <form>
+        {% csrf_token %}
+        <label for="date">Select a Date:</label>
+    <input type="date" id="date" onchange="convertDate()">
+        </form>
+        <p id="convertedDate"></p>
+        <div id="student_table"></div>
+
+        <script >
+            let attendedStudentData = null;
+
+            function convertDate() {
+                var dateInput = document.getElementById('date');
+                var convertedDate = document.getElementById('convertedDate');
+                var selectedDate = dateInput.value;
+                convertedDate.innerText = "Selected Date: " + selectedDate;
+                console.log(selectedDate)
+                var csrf_token = getCookie('csrftoken');
+
+                fetch('{% url "showattendancebydate" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrf_token,
+
+                    },
+                    body: JSON.stringify({'selected_date': selectedDate})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    attendedStudentData = data["data"];
+                    console.log(attendedStudentData)
+                    console.log(data);
+                    showdata(attendedStudentData);
+
+                 })
+                .catch(error => console.error('Error:', error));
+            }
+
+            
+
+            function showdata(attendedStudentData){
+                var tableContainer = document.createElement('div');
+                tableContainer.id = 'student_table_div';
+
+                var table = document.createElement('table');
+                var thead = document.createElement('thead');
+                var row = thead.insertRow();
+                var keycell = row.insertCell(0);
+                var valuecell = row.insertCell(1);
+                keycell.innerText = "key";
+                valuecell.innerText = "Name";
+                var tbody = document.createElement('tbody');
+                
+                for (var key in attendedStudentData) {
+                    var row = tbody.insertRow();
+                    var keycell = row.insertCell(0);
+                    var valuecell = row.insertCell(1);
+            
+                    keycell.innerText = key;
+                    valuecell.innerText = attendedStudentData[key];
+                }
+                table.appendChild(thead);
+
+                table.appendChild(tbody);
+                tableContainer.appendChild(table);
+                {% comment %} document.body.innerHTML = '';
+
+                document.body.appendChild(tableContainer); {% endcomment %}
+                document.getElementById('student_table').innerHTML = '';
+                {% comment %} division.appendChild(table); {% endcomment %}
+                document.getElementById('student_table').appendChild(tableContainer); 
+
+            }
+            
+            function addRowToTable(key, value) {
+                var tableContainer = document.getElementById('yourTableContainer');
+                tableContainer.innerHTML = '';
+                const tableBody = document.getElementById('attendedContainer');
+                const newRow = document.createElement('tr');
+                const keyCell = document.createElement('td');
+                keyCell.textContent = key;
+                const valueCell = document.createElement('td');
+                valueCell.textContent = value;
+                newRow.appendChild(keyCell);
+                newRow.appendChild(valueCell);
+                tableBody.appendChild(newRow);
+            }
+
+
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+        </script>
+    </body>
+</html>
