@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+    
+            th, td {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+    
+            th {
+                background-color: #f2f2f2;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <div id="student_table"></div>
+
+        <script >
+            let allStudentData = null;
+
+            function showstudents() {
+                
+                var csrf_token = getCookie('csrftoken');
+
+                fetch('{% url "getstudentdata" %}', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrf_token,
+
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    allStudentData = data["data"];
+                    console.log(allStudentData)
+                    console.log(data);
+                    showdata(allStudentData);
+                    
+
+                 })
+                .catch(error => console.error('Error:', error));
+            }
+
+            
+
+            function showdata(allStudentData){
+                var tableContainer = document.createElement('div');
+                tableContainer.id = 'student_table_div';
+
+                var table = document.createElement('table');
+                var thead = document.createElement('thead');
+                var row = thead.insertRow();
+                var sncell = row.insertCell(0);
+                var batchcell = row.insertCell(1);
+                var programcell = row.insertCell(2);
+                var namecell = row.insertCell(3);
+                var rollnocell = row.insertCell(4);
+                var noofattendancecell = row.insertCell(5);
+                var datecell = row.insertCell(6);
+
+                sncell.innerText = "SN";
+                batchcell.innerText = "Batch";
+                programcell.innerText = "Program";
+                namecell.innerText = "Name";
+                rollnocell.innerText = "Roll no.";
+                noofattendancecell.innerText = "No of attendance";
+                datecell.innerText = "Date of attendance"
+
+                var tbody = document.createElement('tbody');
+                
+                Object.keys(allStudentData).forEach(key => {
+                    console.log(allStudentData[key])
+                    eachstudent=allStudentData[key]
+                    var row = tbody.insertRow();
+                    var sncell = row.insertCell(0);
+                    sncell.innerText = key;
+                    var batchcell = row.insertCell(1);
+                    var programcell = row.insertCell(2);
+                    var namecell = row.insertCell(3);
+                    var rollnocell = row.insertCell(4);
+                    var noofattendancecell = row.insertCell(5);
+                    var datecell = row.insertCell(6);
+                    batchcell.innerText = eachstudent["batch"];
+                    programcell.innerText = eachstudent["program"];
+                    namecell.innerText = eachstudent["name"];
+                    rollnocell.innerText = eachstudent["rollno"];
+                    noofattendancecell.innerText = eachstudent["noofattendance"];
+                    datecell.innerText = eachstudent["dateofattendance"]
+                  
+                    
+
+                });
+                
+                table.appendChild(thead);
+
+                table.appendChild(tbody);
+                tableContainer.appendChild(table);
+             
+                document.getElementById('student_table').innerHTML = '';
+                document.getElementById('student_table').appendChild(tableContainer); 
+
+            }
+            
+            
+           showstudents()
+
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+        </script>
+        </body>
+</html>

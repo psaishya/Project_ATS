@@ -440,4 +440,42 @@ def showattendancebydate(request):
 
     return JsonResponse({'result': 'error', 'message': 'Invalid request method'}, status=400)
 
+def view_students(request):
+    return render(request,"view_students.html")
 
+def getstudentdata(request):
+    if request.method == 'GET':
+        students_dict={}
+        student_ref=db.reference(f'Students')
+                # print(studentInfo_ref)
+        students = student_ref.get()
+        print("jhasfgdrk")
+        print(students)
+        if students is not None:
+                print(students)
+                ids=list(students.keys())
+                sn=1
+                print(ids)
+                
+                for id in ids:
+                    dataref=db.reference(f'Students/{id}')
+                    datarefdata=dataref.get()
+                    if datarefdata is not None:
+                        print(datarefdata)
+                        # last_attendance=time.strptime(daterefdata['last_attendance_time'], '%Y-%m-%d %H:%M:%S')
+                        last_attendance=datarefdata['last_attendance_time']                        
+                        name=datarefdata['name']  
+                        batch=datarefdata['batch']  
+                        rollno=datarefdata['rollno']  
+                        program=datarefdata['faculty']  
+                        noofattendance=datarefdata['total_attendance']
+                        students_dict[sn]={"name":name,"batch":batch,"rollno":rollno,"program":program,"dateofattendance":last_attendance,"noofattendance":noofattendance}
+
+                        sn+=1
+                    
+                print(students_dict) 
+        
+        
+        return JsonResponse({'data': students_dict})
+    else:
+        return JsonResponse({'error': 'Invalid method'})
