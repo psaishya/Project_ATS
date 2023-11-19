@@ -32,7 +32,6 @@ urlpatterns = [
     
     # path('attendance/', attendance, name='attendance'),
     path('take_attendance/', take_attendance, name='take_attendance'),
-    path('get_message/', get_message, name='get_message'),
 
 
     path('webcam_streamcheck/', webcam_streamcheck, name='webcam_streamcheck'),

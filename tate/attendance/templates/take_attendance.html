@@ -9,70 +9,32 @@
 <body>
     <h1>Face Data Capture Confirmation</h1>
 
-    <button onclick="startAttendance()">Start attendance</button>
 
     <div id="liveFeed">
         <img src="{% url 'webcam_streamcheck' %}" alt="webcam_stream_for_recognition" width="640" height="480">
     </div>
 
-    <div id="responseContainer">
-        hi
-    </div>
-<div id="attendedContainer">
-    show_attended_student
-</div>
-<div>Todays attendance
+
+<div>Today attended
     <ul id="attendedList"></ul>
+
     </div>
     <script>
-        function startAttendance() {
-            console.log("function")
-        }
+        
 
-        console.log("this is scripts");
-
-        {% comment %} function fetchData() {
-             fetch('{% url 'get_message'  %}')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('responseContainer').innerText = JSON.stringify(data);
-                    console.log(JSON.stringify(data))
-
-                })
-                .catch(error => console.error('Error:', error)); 
-            } {% endcomment %}
-               // fetch('{% url 'get_message'  %}')
-  //.then(response => {
-   // if (!response.ok) {
-   //   throw new Error('Network response was not ok');
-  //  }
-   // return response.json(); // or response.text() depending on the content type
- // })
- // .then(data => {
-    // Process the data
- // })
- // .catch(error => {
-    //console.error('Error:', error);
- // });
-       // }
-
-        // Call fetchData initially
-        {% comment %} fetchData();
-
-        // Periodically update the data every 5 seconds (adjust as needed)
-        setInterval(fetchData, 5000); {% endcomment %}
 
         let attendedStudentData = null;
 
             function show_attended_student(){
+                
                 console.log("function called")
+
                 fetch('{% url 'show_attended_student'  %}')
                     .then(response => response.json())
                     .then(data => {
                         attendedStudentData = data["data"];
-
                         x=data["data"]
-                        document.getElementById('attendedContainer').innerText = JSON.stringify(x);
+                        {% comment %} document.getElementById('attendedContainer').innerText = JSON.stringify(x); {% endcomment %}
                         console.log(JSON.stringify(data))
                         updateList()
     
@@ -81,20 +43,37 @@
             }
 
             function updateList() {
+
                 console.log("update function")
-                document.getElementById('attendedList').innerText="";
-                Object.keys(attendedStudentData).forEach(key => {
-                    let listItem = document.createElement('li');
-                    listItem.innerText = `${key}: ${attendedStudentData[key]}`;
-                    attendedList.appendChild(listItem);
-                });
+                if (attendedStudentData !== null) {
+                    // Clear the existing list
+                    let listcont = document.getElementById('attendedList');
                     
+                    if (listcont !== null) {
+                        while (listcont.firstChild) {
+                            listcont.removeChild(listcont.firstChild);
+                        }
+                            Object.keys(attendedStudentData).forEach(key => {
+                            let listItem = document.createElement('li');
+                            listItem.innerText = `${key}: ${attendedStudentData[key]}`;
+                            {% comment %} attendedList.appendChild(listItem); {% endcomment %}
+                            listcont.appendChild(listItem);
+                         });}
+                         else {
+                            console.error('Element with ID "attendedList" not found.');}
+            }
                 
             }
             document.addEventListener('DOMContentLoaded', function() {
+                var attContainer = document.createElement('div');
+                attContainer.id = 'attended_div';
+                var listcont = document.createElement('ul');
+                listcont.id = 'attendedList';
+                attContainer.appendChild(listcont);
+                console.log("createddddddddddddddddd")
                 show_attended_student();
             });
-        setInterval(show_attended_student, 5000); 
+        setInterval(show_attended_student, 2000); 
 
 
 

@@ -46,10 +46,7 @@ def facedata_capture(request):
         rollno = request.POST.get("rollno")
         batch = request.POST.get("batch")
         program = request.POST.get("program")
-    # name=input("Enter the name of student (firstname_lastname) : ")
-    # rollno=input("Enter the roll number : ")
-    # batch=input("Enter the batch (eg. 2020) : ")
-    # program=input("Enter the program (eg. CE,CS) : ")
+    
 
         file_name=program +'_'+ batch +'_'+ name +'_'+ rollno
 
@@ -82,7 +79,7 @@ def facedata_capture(request):
             for face in faces[:1]:
                 x,y,w,h=face
                 offset=5
-                face_offset=frame[y-offset:y+h+offset,x-offset:x+w+offset]
+                face_offset=grey_frame[y-offset:y+h+offset,x-offset:x+w+offset]
 
                 face_selection=cv2.resize(face_offset,(100,100))
                 
@@ -187,7 +184,7 @@ video_thread.daemon = True
 video_thread.start()
 @gzip.gzip_page
 def webcam_stream(request):
-    global latest_frame
+    global latest_frame 
 
     def generate_frames():
         while True:
@@ -211,17 +208,11 @@ def train_model(request):
     labels=[] 
     face_id=0
     names={}
-    EPOCH=200
-    print(type(os.listdir(face_dataset_path)))
-    print(len((os.listdir(face_dataset_path))))
-    if(len((os.listdir(face_dataset_path))))==0:
-        
-        return HttpResponse("No data to train")
+    
     for filename in os.listdir(face_dataset_path):
-        
         if filename.endswith('.npy'):
             names[face_id]=filename[:-4]
-            
+        
             face_data_item=np.load(face_dataset_path+filename)
             print(face_data_item.shape)
             face_data.append(face_data_item)
@@ -248,74 +239,41 @@ def train_model(request):
     print(no_of_person)
     x_train, x_test, y_train, y_test = train_test_split(face_dataset, face_labels, test_size=0.2)
 
-    early_stopping = EarlyStopping(monitor='val_loss', min_delta=0.001, patience=10, restore_best_weights=True)
-    lr_sch = ReduceLROnPlateau(monitor = 'val_loss', patience= 8, factor = 0.1, verbose = 1, min_lr = 5e-10)
 
     print(x_test.size)
     print(x_train.size)
     print(x_test.shape)
     print(x_train.shape)
-    x_train = x_train.reshape((x_train.shape[0], 100, 100,3))
-    x_test = x_test.reshape((x_test.shape[0], 100, 100,3))
+    x_train = x_train.reshape((x_train.shape[0], 100, 100,1))
+    x_test = x_test.reshape((x_test.shape[0], 100, 100,1))
     print(x_test.shape)
     print(x_train.shape)
 
     print("Shape of y_train:", y_train.shape)
     print("Shape of y_test:", y_test.shape)
-    y_train = to_categorical(y_train, num_classes=no_of_person)
-    y_test = to_categorical(y_test, num_classes=no_of_person)
-    print("Shape of y_train:", y_train.shape)
-    print("Shape of y_test:", y_test.shape)
-    print("Shape of input data:", x_train.shape[0])
+    print(type(y_train))
+    y_train = y_train.astype(np.int32)
+    y_test = y_test.astype(np.int32)
+
+    print(cv2.__version__)
 
 
-    model=Sequential(
-    [  
-        
-        RandomFlip("horizontal"),
-        RandomRotation(0.2),
-        RandomZoom(0.2),
-        
-        BatchNormalization(input_shape=(100, 100, 3)),
-        Conv2D(16, (3, 3), activation="relu",input_shape=(100, 100, 3)),
-        MaxPooling2D((2, 2)),
-        # Dropout(0.25),
-        BatchNormalization(),
-        
-        Conv2D(64, (3, 3), activation="relu"),
-        MaxPooling2D((2, 2)),
-        # Dropout(0.25),
-        BatchNormalization(),
-        
-        Conv2D(64, (3, 3), activation="relu"),
-        MaxPooling2D((2, 2)),
-        Dropout(0.25),
-        BatchNormalization(),
-        
-        Flatten(),
-        
-        Dense(units=32,activation="relu"),
-        BatchNormalization(),
-        
-        Dense(units=64,activation="relu"),
-        BatchNormalization(),
-            
-        Dense(units=no_of_person,activation="softmax")
-    ]
-    )
-    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-    model.fit( x_train,y_train,
-            epochs=EPOCH,
-            validation_data=(x_test, y_test),
-            callbacks=[early_stopping, lr_sch],
-            shuffle=False)
-    test_loss, test_acc = model.evaluate(x_test, y_test)
-    print(f'Test accuracy: {test_acc}')
+    clf=cv2.face.LBPHFaceRecognizer_create()
+    clf.train(x_train,y_train)
     savelocation="./static/"
-    model.save(savelocation+"facetrainingmodel.keras")
-    return render(request, "trained.html")
 
+    clf.write(savelocation+"classifier.xml")
+ ########testing   
+    clf.read(savelocation + "classifier.xml")
+    predictions = []
+    for face in x_test:
+        id, confidence = clf.predict(face)
+        predictions.append(id)
+    print("predictions:"+str(predictions))
+    accuracy = np.mean(np.array(predictions) == y_test)
+    print("Accuracy:", accuracy)
+    return render(request, "trained.html",context={"accuracy":(accuracy*100)})
 
 def training_model(request):
     return render(request, "training_model.html")

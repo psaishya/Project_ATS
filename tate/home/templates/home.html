@@ -4,14 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
+    {% load static %}
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url("{% static 'img/home_background.jpg' %}");
+            background-size: cover;
+            background-position: center;
+            text-align: center;
+            color: white; 
+        }
+
+        header {
+            background-color: rgba(0, 0, 0, 0.5); 
+            color: white;
+            padding: 1em;
+        }
+
+        h1 {
+            color: #fff;
+        }
+
+        .button-container {
+            margin-top: 20vh;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
+{% load static%}
 <body>
-    <h1>Data Recording Options</h1>
+    <h1>Student Data Management</h1>
+    {% comment %} <img src="{% static 'img/home_background.jpg' %}" alt="My image"> {% endcomment %}
 
     <button onclick="recordNewData()">Record New Data</button>
     <button onclick="takeAttendance()">Take Attendance</button>
     <button onclick="trainModel()">Train Model</button>
     <button onclick="viewAttendance()">View Attendance</button>
+    <button onclick="viewStudents()">View Students</button>
+
 
 
 
@@ -39,6 +86,11 @@
         function viewAttendance(){
             alert("Viewing attendance...");
             window.location.href = "{% url 'view_attendance' %}";
+
+        }
+        function viewStudents(){
+            alert("Viewing students...");
+            window.location.href = "{% url 'view_students' %}";
 
         }
     </script>
