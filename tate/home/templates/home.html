@@ -11,28 +11,30 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-image: url("{% static 'img/home_background.jpg' %}");
+            background-image: url("{% static 'img/home_background2.jpg' %}");
             background-size: cover;
             background-position: center;
             text-align: center;
             color: white; 
-        }
-
-        header {
-            background-color: rgba(0, 0, 0, 0.5); 
-            color: white;
-            padding: 1em;
+            
         }
 
         h1 {
             color: #fff;
+            margin-top:150px
+
         }
 
         .button-container {
-            margin-top: 20vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 60vh; 
         }
 
         button {
+            width: 200px;
             background-color: #4CAF50;
             color: white;
             padding: 10px 15px;
@@ -52,13 +54,13 @@
 <body>
     <h1>Student Data Management</h1>
     {% comment %} <img src="{% static 'img/home_background.jpg' %}" alt="My image"> {% endcomment %}
-
+<div class="button-container">
     <button onclick="recordNewData()">Record New Data</button>
-    <button onclick="takeAttendance()">Take Attendance</button>
     <button onclick="trainModel()">Train Model</button>
+    <button onclick="takeAttendance()">Take Attendance</button>
     <button onclick="viewAttendance()">View Attendance</button>
     <button onclick="viewStudents()">View Students</button>
-
+</div>
 
 
 

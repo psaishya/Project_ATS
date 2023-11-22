@@ -4,10 +4,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Face Data Capture Confirmation</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-image: url("{% static 'img/home_background2.jpg' %}");
+        }
+
+        h1 {
+            color: #fff;
+            margin-top: 5px;
+            margin-bottom:50px;
+            text-align: center;
+        }
+
+        #content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        form {
+            width:325px;
+            text-align: left;
+            margin-right: 40px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            background-color: rgba(230, 255, 255, 0.8);
+        }
+
+        form label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        form input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top:10px;
+        }
+      
+        #liveFeed {
+            margin-left: 20px;
+        }
+        #message {
+            color: #fff;
+            margin-bottom: 10px;
+
+        }
+
+        #liveFeed img {
+            display: block;
+            margin: 0 auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+ 
 </head>
 <body>
-    <h1>Face Data Capture Confirmation</h1>
-
+    <h1>Face Data Capture </h1>
+<div id="content">
     <form method="post" action="{% url 'facedata_capture' %}">
         {% csrf_token %}
         <label for="name">Name:</label>
@@ -22,30 +101,33 @@
         <label for="program">Program:</label>
         <input type="text" id="program" name="program" required><br>
 
-        <button type="submit">Capture Now</button>
+        <button type="submit" >Capture Now</button>
     </form>
-
     <div id="liveFeed">
+        <div id="message">Please look at the camera. Your face data will be recorded when you press capture button.</div>
         <img src="{% url 'webcam_stream' %}" alt="Webcam check" width="640" height="480">
+        
     </div>
 
-    <div id="capturedFace">
-        <!-- The last captured face will be displayed here -->
-    </div>
-    {{message}}
+</div>
+  
     <script>
-        // Check if the message is "Successfully recorded"
         var message = "{{ message }}";
         if (message === "Successfully recorded") {
             // Show a tick mark in an alert
-            alert("✔ Successfully recorded");
-
-            window.location.href = "{% url 'home' %}";
-
+            console.log("inside ")
+            x=document.getElementById("message").innerHTML
+            console.log(x)
+            document.getElementById("message").innerHTML="Successfully recorded";
+            {% comment %} window.location.href = "{% url 'home' %}"; {% endcomment %}
+            setTimeout(function () {
+                window.location.href = "{% url 'home' %}";
+            }, 2000) 
         }
+        
+
     </script>
    
 
-    <!-- You can add more content or redirect to other pages as needed -->
 </body>
 </html>
