@@ -8,10 +8,24 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="">
+        {% load static %}
+
         <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin-left: 20px;
+                padding: 0;
+                height: 100vh;
+                background-image: url("{% static 'img/viewattendance.jpg' %}");
+                color:white;
+                margin-top:30px
+            }
+            
             table {
                 border-collapse: collapse;
-                width: 100%;
+                width: 80%;
+                margin-left:25px;
+
             }
     
             th, td {
@@ -23,10 +37,23 @@
             th {
                 background-color: #f2f2f2;
             }
+            #homeButton {
+                position: absolute;
+                top: 0;
+                right: 0;
+                margin: 20px;
+                padding: 10px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
         </style>
     </head>
     <body>
-        
+        <button id="homeButton" onclick="goToHome()">GO BACK TO HOMEPAGE</button>
+        <h1>Student Details</h1>
         <div id="student_table"></div>
 
         <script >
@@ -56,7 +83,9 @@
                 .catch(error => console.error('Error:', error));
             }
 
-            
+            function goToHome() {
+                window.location.href = "{% url 'home' %}";
+            }
 
             function showdata(allStudentData){
                 var tableContainer = document.createElement('div');

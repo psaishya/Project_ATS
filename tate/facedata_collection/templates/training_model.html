@@ -4,21 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loading Page</title>
-    <!-- Add any CSS styles for your loading page here -->
+    {% load static %}    
     <style>
         body {
-            text-align: center;
-            padding: 50px;
+            height: 100vh;
+            background-image: url("{% static 'img/train3.png' %}");
+            background-size: cover;
+            background-position: center;
+            color: white;
+            display:flex;
+            justify-content:center;
+            align-content:center;
         }
+        h1 {
+            text-align: center;
+            margin:auto;
+        }
+        #homeButton {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 20px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 <body>
+    <button id="homeButton" onclick="goToHome()">GO BACK TO HOMEPAGE</button>
+
     <h1>Please wait...</h1>
     <div class="loader"></div>
 
     <script>
         window.location.href = "{% url 'train_model' %}";
-
+        function goToHome() {
+            window.location.href = "{% url 'home' %}";
+        }
     </script>
 </body>
 </html>

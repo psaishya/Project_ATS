@@ -23,7 +23,9 @@ from facedata_collection.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', home,name="home"),
     path('home/', home,name="home"),
+
     path('webcam_stream/', webcam_stream, name='webcam_stream'),
     path('facedata_capture/', facedata_capture, name='facedata_capture'),
    

@@ -15,7 +15,7 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-image: url("{% static 'img/home_background2.jpg' %}");
+            background-image: url("{% static 'img/attendance.png' %}");
         }
 
         h1 {
@@ -81,10 +81,24 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         }
+        #homeButton {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 20px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
  
 </head>
 <body>
+    <button id="homeButton" onclick="goToHome()">GO BACK TO HOMEPAGE</button>
+
     <h1>Face Data Capture </h1>
 <div id="content">
     <form method="post" action="{% url 'facedata_capture' %}">
@@ -124,7 +138,9 @@
                 window.location.href = "{% url 'home' %}";
             }, 2000) 
         }
-        
+        function goToHome() {
+            window.location.href = "{% url 'home' %}";
+        }
 
     </script>
    

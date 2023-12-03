@@ -4,21 +4,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Face Data Capture Confirmation</title>
-</head>
+    <title>Attendance</title>
+    {% load static %}
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-image: url("{% static 'img/attendance.png' %}");
+            background-size: cover;
+            color: #fff;
+        }
+    
+        h1 {
+            color: #fff;
+            margin-top: 15px;
+            margin-bottom:50px;
+            text-align: center;
+        }
+        #liveFeed img {
+            display: block;
+            margin: 0 auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+
+        }
+        .content{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 60%;
+            margin: 0;
+        }
+       ul{
+        list-style-type: none;
+        padding: 0;
+        margin:0;
+       }
+       #homeButton {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 20px;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    </style>
+</head> 
 <body>
-    <h1>Face Data Capture Confirmation</h1>
+    <button id="homeButton" onclick="goToHome()">GO BACK TO HOMEPAGE</button>
 
+    <h1>Face Attendance</h1>
 
+<div class="content">
     <div id="liveFeed">
         <img src="{% url 'webcam_streamcheck' %}" alt="webcam_stream_for_recognition" width="640" height="480">
     </div>
 
 
-<div>Today attended
+<div><h3>Today attended</h3>
     <ul id="attendedList"></ul>
 
     </div>
+</div>
     <script>
         
 
@@ -41,7 +99,9 @@
                     })
                     .catch(error => console.error('Error:', error));
             }
-
+            function goToHome() {
+                window.location.href = "{% url 'home' %}";
+            }
             function updateList() {
 
                 console.log("update function")

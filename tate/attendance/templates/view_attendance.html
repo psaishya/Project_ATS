@@ -8,10 +8,23 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="">
+        {% load static %}
+
         <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin-left: 20px;
+                padding: 0;
+                height: 100vh;
+                background-image: url("{% static 'img/viewattendance.jpg' %}");
+                color:white;
+            }
+    
             table {
                 border-collapse: collapse;
-                width: 100%;
+                width: 60%;
+                margin-left:25px;
+
             }
     
             th, td {
@@ -21,14 +34,37 @@
             }
     
             th {
-                background-color: #f2f2f2;
+                background-color: #3498db; 
+                color: white;
+            }
+            form {
+                margin-top: 40px; 
+                margin-left:25px;
+            }
+            #convertedDate{
+                margin-left:25px;
+
+            }
+            #homeButton {
+                position: absolute;
+                top: 0;
+                right: 0;
+                margin: 20px;
+                padding: 10px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
             }
         </style>
     </head>
     <body>
+        <button id="homeButton" onclick="goToHome()">GO BACK TO HOMEPAGE</button>
+
         <form>
         {% csrf_token %}
-        <label for="date">Select a Date:</label>
+        <label for="date"><h2>Select a Date:</h2></label>
     <input type="date" id="date" onchange="convertDate()">
         </form>
         <p id="convertedDate"></p>
@@ -67,7 +103,9 @@
             }
 
             
-
+            function goToHome() {
+                window.location.href = "{% url 'home' %}";
+            }
             function showdata(attendedStudentData){
                 var tableContainer = document.createElement('div');
                 tableContainer.id = 'student_table_div';

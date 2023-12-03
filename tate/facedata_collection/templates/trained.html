@@ -4,15 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loading Page</title>
-    <!-- Add any CSS styles for your loading page here -->
+    {% load static %}    
     <style>
         body {
+            height: 100vh;
+            background-image: url("{% static 'img/train3.png' %}");
+            background-size: cover;
+            background-position: center;
+            color: white;
+            display:flex;
+            flex-direction: column;
+            justify-content:center;
+            align-items:center;
+            margin: 0;
+
+        }
+        h1 {
             text-align: center;
-            padding: 50px;
+        }
+        button{
+            margin-top:20px;
+
+        }
+        button {
+            width: 200px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            margin-top:20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        #homeButton {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 20px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
+    <button id="homeButton" onclick="goToHome()">GO BACK TO HOMEPAGE</button>
+
     <h1>Model has been trained with accuracy {{accuracy}} %</h1>
 
     <button onclick="trainModel()">Train again</button>
@@ -22,7 +67,9 @@
         window.location.href = "{% url 'training_model' %}";
 
     }
-
+    function goToHome() {
+        window.location.href = "{% url 'home' %}";
+    }
     setTimeout(function () {
         window.location.href = "{% url 'home' %}";
     }, 5000)   </script> 
