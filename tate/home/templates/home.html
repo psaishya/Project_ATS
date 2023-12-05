@@ -66,32 +66,29 @@
 
     <script>
         function recordNewData() {
-            // Add your logic for recording new data here
-            alert("Recording new data...");
+            {% comment %} alert("Recording new data..."); {% endcomment %}
             window.location.href = "{% url 'facedata_capture' %}";
 
         }
 
         function takeAttendance() {
-            // Add your logic for taking attendance here
-            alert("Taking attendance...");
+            {% comment %} alert("Taking attendance..."); {% endcomment %}
             window.location.href = "{% url 'take_attendance' %}";
 
         }
 
         function trainModel(){
-            alert("Training model...");
+            {% comment %} alert("Training model..."); {% endcomment %}
             window.location.href = "{% url 'training_model' %}";
-            {% comment %} window.location.href = "{% url 'train_model' %}"; {% endcomment %}
 
         }
         function viewAttendance(){
-            alert("Viewing attendance...");
+            {% comment %} alert("Viewing attendance..."); {% endcomment %}
             window.location.href = "{% url 'view_attendance' %}";
 
         }
         function viewStudents(){
-            alert("Viewing students...");
+            {% comment %} alert("Viewing students..."); {% endcomment %}
             window.location.href = "{% url 'view_students' %}";
 
         }
