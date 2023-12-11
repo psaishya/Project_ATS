@@ -66,7 +66,7 @@ def find_names():
         if filename.endswith('.npy'):
             names[face_id]=filename[:-4]
             face_id+=1
-    print(names)
+    # print(names)
     return names
 names=find_names()
 
@@ -128,8 +128,11 @@ def recognize_faces(frame):
         confidence=int(100*(1-predict/300))
         print("predict="+str(predict)+"confidence="+str(confidence))
         out=id
+        print("------------------")
+        print(names[out])
+        print("------------------")
 
-        if confidence>70:
+        if confidence>72:
             text = names[out]
         else:
             text="Unknown face"

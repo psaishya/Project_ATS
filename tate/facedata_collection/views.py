@@ -96,7 +96,7 @@ def facedata_capture(request):
             # cv2.imshow("faces",frame)    
             
             key_pressed=cv2.waitKey(1)
-            if key_pressed ==ord('q') or len(face_data)==15 :
+            if key_pressed ==ord('q') or len(face_data)==50 :
                 break
 
         face_data=np.array(face_data)
@@ -151,9 +151,10 @@ def detect_faces(frame):
 
     # Combine the detected faces from both classifiers
     faces = list(faces_frontal) + list(faces_side)
+    faces=sorted(faces,key=lambda x: x[2]*x[3],reverse=True)
 
     # Draw rectangles around detected faces
-    for face in faces:
+    for face in faces[:1]:
         x, y, w, h = face
         cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
@@ -271,9 +272,17 @@ def train_model(request):
         id, confidence = clf.predict(face)
         predictions.append(id)
     print("predictions:"+str(predictions))
-    accuracy = np.mean(np.array(predictions) == y_test)
+    y_test_flat = y_test.flatten()
+    print(y_test_flat)
+    print(predictions==y_test_flat)
+    matching_elements = np.sum(np.array(predictions) == y_test_flat)
+    print(matching_elements)
+    total_elements = len(predictions)
+    accuracy = (matching_elements / total_elements) * 100
+
+    # accuracy = np.mean(np.array(predictions) == y_test)
     print("Accuracy:", accuracy)
-    return render(request, "trained.html",context={"accuracy":(accuracy*100)})
+    return render(request, "trained.html",context={"accuracy":(accuracy)})
 
 def training_model(request):
     return render(request, "training_model.html")
