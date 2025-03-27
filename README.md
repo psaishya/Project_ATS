@@ -1,4 +1,5 @@
 # Project_ATS - Attendance Tracking System
+ATS is an attendance tracking system developed using Python and OpenCV. It makes use if facial recognition technology to ensure accurate and transparent attendance records.
 
 ## Installation and Setup
 
