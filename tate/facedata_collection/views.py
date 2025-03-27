@@ -12,17 +12,7 @@ import numpy as np
 import cv2
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
-from tensorflow import keras 
-from keras.models import Sequential
-from keras.layers import Conv2D, MaxPooling2D,BatchNormalization
-from keras.layers import Activation, Dropout, Flatten, Dense
-from keras.layers.experimental.preprocessing import RandomFlip, RandomRotation, RandomZoom
-from keras.utils import to_categorical
-from keras.callbacks import EarlyStopping,ReduceLROnPlateau
-from tensorflow.keras.models import load_model
-from django.template import Context, Template, loader
-from django.urls import reverse
-from threading import Event
+
 
 cred = credentials.Certificate("./static/tateserviceaccountkey.json")
 firebase_admin.initialize_app(cred,{
