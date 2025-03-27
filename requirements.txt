@@ -1,0 +1,6 @@
+django
+opencv-python
+tensorflow
+firebase_admin
+scikit-learn
+opencv-contrib-python
