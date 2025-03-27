@@ -5,7 +5,7 @@ from django.views.decorators import gzip
 import numpy as np
 import os
 import tensorflow as tf
-from keras.models import load_model
+# from keras.models import load_model
 from datetime import timedelta
 import time
 import threading
@@ -53,7 +53,7 @@ def take_attendance(request):
 
 frontal_face_cascade=cv2.CascadeClassifier("./static/haarcascade_frontalface_alt.xml")
 side_face_cascade = cv2.CascadeClassifier("./static/haarcascade_profileface.xml")
-model = load_model('./static/facetrainingmodel.keras')
+# model = load_model('./static/facetrainingmodel.keras')
 face_dataset_path="./face_dataset/"
 clf=cv2.face.LBPHFaceRecognizer_create() 
 clf.read("./static/classifier.xml")
