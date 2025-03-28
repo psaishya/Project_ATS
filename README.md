@@ -35,7 +35,7 @@ pip install -r requirements.txt
 ### 4. Change Directory
 
 ```sh
-cd ats
+cd tate
 ```
 
 ### 5. Apply Migrations
